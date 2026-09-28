@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Procurement.Api/Procurement.Api.csproj" />
+  <Project Path="Procurement.Tests/Procurement.Tests.csproj" />
+</Solution>
