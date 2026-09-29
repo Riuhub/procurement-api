@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Procurement.Api.Data;
@@ -37,5 +38,25 @@ public class VendorsController : ControllerBase
         _db.Vendors.Add(vendor);
         await _db.SaveChangesAsync();
         return CreatedAtAction(nameof(GetById), new { id = vendor.Id }, vendor);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> Delete(int id)
+    {
+        var vendor = await _db.Vendors.FindAsync(id);
+        if (vendor is null)
+            return NotFound();
+        _db.Vendors.Remove(vendor);
+        
+        try
+        {
+            await _db.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            return Conflict("This vendor cannot be deleted because it has purchase orders.");
+        }
+
+        return NoContent();
     }
 }
