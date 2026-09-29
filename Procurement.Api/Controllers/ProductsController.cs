@@ -41,4 +41,24 @@ public class ProductsController : ControllerBase
         await _db.SaveChangesAsync();
         return CreatedAtAction(nameof(GetById), new { id = product.Id }, product);
     }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> Delete(int id)
+    {
+        var product = await _db.Products.FindAsync(id);
+        if (product is null)
+            return NotFound();
+        _db.Products.Remove(product);
+
+        try
+        {
+            await _db.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            return Conflict("This product cannot be deleted because it has purchase orders.");
+        }
+
+        return NoContent();
+    }
 }
