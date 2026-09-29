@@ -8,5 +8,5 @@ LEFT JOIN PurchaseOrders o
        ON o.VendorId = v.Id AND o.Status = 'Draft'
 LEFT JOIN PurchaseOrderLines l
        ON l.PurchaseOrderId = o.Id
-GROUP BY v.Name
+GROUP BY v.Id , v.Name
 ORDER BY OpenValue DESC;
